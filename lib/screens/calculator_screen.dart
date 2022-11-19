@@ -11,7 +11,22 @@ class CalculatorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final calculatorBloc = BlocProvider.of<CalculatorBloc>(context);
 
+    void calculateResult() {
+      calculatorBloc.add(CalculateResult());
+      calculatorBloc.add(SaveHistory());
+    }
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calculator BLOC'),
+      ),
+      drawer: const Drawer(
+        backgroundColor: Colors.indigoAccent,
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: HistoryCalculator(),
+        ),
+      ),
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -126,7 +141,7 @@ class CalculatorScreen extends StatelessWidget {
                   CalculatorButton(
                     text: '=',
                     bgColor: const Color(0xffF0A23B),
-                    onPressed: () => calculatorBloc.add(CalculateResult()),
+                    onPressed: () => calculateResult(),
                   ),
                 ],
               ),
@@ -135,5 +150,63 @@ class CalculatorScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class HistoryCalculator extends StatelessWidget {
+  const HistoryCalculator({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CalculatorBloc, CalculatorState>(
+        builder: (content, state) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const SizedBox(
+            height: 70,
+          ),
+          const Text(
+            'History of Calculator',
+            style: TextStyle(fontSize: 20),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: 300,
+            height: 500,
+            child: ListView.builder(
+              itemCount: state.history.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "${index + 1}.",
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        state.history[index],
+                        style: const TextStyle(fontSize: 16),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

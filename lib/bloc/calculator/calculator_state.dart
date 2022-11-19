@@ -5,12 +5,14 @@ class CalculatorState {
   final String firstNumber;
   final String secondNumber;
   final String operation;
+  List<String> history;
 
   CalculatorState({
-    this.mathResult = '30',
-    this.firstNumber = '10',
-    this.secondNumber = '20',
+    this.mathResult = '0',
+    this.firstNumber = '0',
+    this.secondNumber = '0',
     this.operation = '+',
+    this.history = const [],
   });
 
   CalculatorState copyWith({
@@ -18,11 +20,13 @@ class CalculatorState {
     String? firstNumber,
     String? secondNumber,
     String? operation,
+    List<String>? history,
   }) =>
       CalculatorState(
         mathResult: mathResult ?? this.mathResult,
         firstNumber: firstNumber ?? this.firstNumber,
         secondNumber: secondNumber ?? this.secondNumber,
         operation: operation ?? this.operation,
+        history: history ?? this.history,
       );
 }

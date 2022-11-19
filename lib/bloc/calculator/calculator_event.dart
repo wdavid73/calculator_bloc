@@ -20,3 +20,5 @@ class OperationEntry extends CalculatorEvent {
   final String operation;
   OperationEntry(this.operation);
 }
+
+class SaveHistory extends CalculatorEvent {}

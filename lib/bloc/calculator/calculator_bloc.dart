@@ -51,10 +51,14 @@ class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
       if (event is CalculateResult) {
         emit.call(_calculateResult());
       }
+
+      if (event is SaveHistory) {
+        emit.call(_saveHistory());
+      }
     });
   }
   CalculatorState _resetAC() {
-    return CalculatorState(
+    return state.copyWith(
       firstNumber: '0',
       mathResult: '0',
       secondNumber: '0',
@@ -87,5 +91,17 @@ class CalculatorBloc extends Bloc<CalculatorEvent, CalculatorState> {
       default:
         return state;
     }
+  }
+
+  CalculatorState _saveHistory() {
+    final String num1 = state.firstNumber;
+    final String num2 = state.secondNumber;
+    final String result = state.mathResult;
+    final String operation = state.operation;
+    final String history = "$num1 $operation $num2 = $result";
+
+    final list = state.history.toList();
+    list.add(history);
+    return state.copyWith(history: list);
   }
 }
